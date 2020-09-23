@@ -1,6 +1,10 @@
 # GitHub Action for Laravel
 name: Testing Laravel
 on: [push, pull_request]
+defaults:
+  run:
+    shell: bash
+    working-directory: php-app-1
 jobs:
   tests:
     name: Composer (PHP ${{ matrix.php-versions }} on ${{ matrix.operating-system }})
@@ -55,27 +59,23 @@ jobs:
       - uses: actions/cache@v1
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/php-app-1/composer.lock') }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
       - name: Install Composer dependencies
         env:
           APP_GITHUB_TOKEN: ${{ secrets.APP_GITHUB_TOKEN }}
         run: |
-          echo 123
           composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
-        working-directory: ./php-app-1
       - name: Prepare the application
         run: |
           php -r "file_exists('.env') || copy('.env.example', '.env');"
           php artisan key:generate
       - name: Clear Config
-        working-directory: ./php-app-1
         run: php artisan config:clear
       #      - name: Setup tmate session
       #        uses: mxschmitt/action-tmate@v2
       - name: Run Migration
-        working-directory: ./php-app-1
         run: php artisan migrate -v
         env:
           DB_PORT: ${{ job.services.mysql.ports['3306'] }}
