@@ -63,7 +63,6 @@ jobs:
           APP_GITHUB_TOKEN: ${{ secrets.APP_GITHUB_TOKEN }}
         run: |
           echo 123
-#          composer config --global github-oauth.github.com ${APP_GITHUB_TOKEN}
           composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
         working-directory: ./php-app-1
       - name: Prepare the application
