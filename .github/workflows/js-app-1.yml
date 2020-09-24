@@ -6,6 +6,8 @@ defaults:
     working-directory: js-app-1
 jobs:
   tests:
+    name: Yarn install dependencies and run tests on ${{ matrix.operating-system }})
+    runs-on: ${{ matrix.operating-system }}
     strategy:
       fail-fast: false
       matrix:
