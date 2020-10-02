@@ -73,8 +73,8 @@ jobs:
           php artisan key:generate
       - name: Clear Config
         run: php artisan config:clear
-      #      - name: Setup tmate session
-      #        uses: mxschmitt/action-tmate@v2
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v2
       - name: Run Migration
         run: php artisan migrate -v
         env:
